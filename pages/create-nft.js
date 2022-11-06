@@ -9,6 +9,8 @@ const projectId = process.env.NEXT_PUBLIC_INFURA_IPFS_PROJECT_ID
 const projectSecret = process.env.NEXT_PUBLIC_INFURA_IPFS_PROJECT_SECRET
 const projectIdAndSecret = `${projectId}:${projectSecret}`
 
+console.log("start working")
+
 const client = create({
   host: 'ipfs.infura.io',
   port: 5001,
@@ -31,25 +33,29 @@ export default function CreateItem() {
   const [fileUrl, setFileUrl] = useState(null)
   const [formInput, updateFormInput] = useState({ price: '', name: '', description: '' })
   const router = useRouter()
-  
-  async function onChange(e) {
 
+
+  async function onChange(e) {
+    /* upload image to IPFS */
     const file = e.target.files[0]
     try {
-        const added = await client.add(file, {
-            progress: (prog) => console.log(`received: ${prog}`),
-        })
-
-        const url = `https://acccccccc.infura.io/ipfs/${added.path}`
-
-        client.pin.add(added.path).then((res) => {
-            console.log(res)
-            setFileUrl(url)
-        })
+      const added = await client.add(
+        file,
+        {
+          progress: (prog) => console.log(`received: ${prog}`)
+        }
+      )
+      // const url = `https://acccccccc.infura.io/ipfs/${added.path}`
+      // const url ="https:acccccccc.infura-ipfs.io"
+      const url = "https:acccccccc/ipfs/${added.path}"
+      // const url = `https://ipfs.infura.io/ipfs/${added.path}`
+      setFileUrl(url)
+      console.log(url);
     } catch (error) {
-        console.log('Error uploading file: ', error)
-    }
-}
+      console.log('Error uploading file: ', error)
+      console.log("so sad uoload missed");
+    }  
+  }
 
 async function createItem() {
     const { name, description, price } = formInput
@@ -59,7 +65,8 @@ async function createItem() {
         name,
         description,
         image: fileUrl,
-    })
+    }
+    ,console.log("set properties"))
 
     try {
         const added = await client.add(data)
@@ -74,36 +81,50 @@ async function createItem() {
 
   async function uploadToIPFS() {
     const { name, description, price } = formInput
+    console.log("upload start");
     if (!name || !description || !price || !fileUrl) return
     /* first, upload metadata to IPFS */
     const data = JSON.stringify({
       name, description, image: fileUrl
     })
+    console.log(name);
+    console.log(description);
+    console.log("image");
+    console.log("confirm property");
     try {
       const added = await client.add(data)
+      console.log("client connection");
       const url = `https://acccccccc.infura.io/ipfs/${added.path}`
       /* after metadata is uploaded to IPFS, return the URL to use it in the transaction */
       return url
     } catch (error) {
       console.log('Error uploading file: ', error)
+      console.log("kkk")
     }  
   }
 
   async function listNFTForSale() {
     const url = await uploadToIPFS()
+    console.log("ada");
     const web3Modal = new Web3Modal()
     const connection = await web3Modal.connect()
     const provider = new ethers.providers.Web3Provider(connection)
     const signer = provider.getSigner()
 
     /* create the NFT */
+    console.log("create the NFT");
     const price = ethers.utils.parseUnits(formInput.price, 'ether')
     let contract = new ethers.Contract(marketplaceAddress, NFTMarketplace.abi, signer)
     let listingPrice = await contract.getListingPrice()
     listingPrice = listingPrice.toString()
+    console.log("now create the NFT");
     let transaction = await contract.createToken(url, price, { value: listingPrice })
+    // console.log("url");
+    console.log(price);
+    console.log(listingPrice);
+    // console.log("now create the NFT2"); here didn't work
     await transaction.wait()
-
+    console.log("created the NFT");
     router.push('/')
   }
 
