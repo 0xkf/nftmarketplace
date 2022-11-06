@@ -13,7 +13,7 @@ console.log("start working")
 
 const client = create({
   host: 'ipfs.infura.io',
-  port: 5001,
+  port: 9000,
   protocol: 'https',
   headers: {
     authorization: `Basic ${Buffer.from(projectIdAndSecret).toString(
@@ -93,8 +93,9 @@ async function createItem() {
     console.log("confirm property");
     try {
       const added = await client.add(data)
-      console.log("client connection");
-      const url = `https://acccccccc.infura.io/ipfs/${added.path}`
+      console.log("client connecting");
+      // const url = `https://acccccccc.infura.io/ipfs/${added.path}`
+      const url = `https://ipfs.infura.io/ipfs/${added.path}`
       /* after metadata is uploaded to IPFS, return the URL to use it in the transaction */
       return url
     } catch (error) {
