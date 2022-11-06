@@ -47,8 +47,11 @@ export default function CreateItem() {
       )
       // const url = `https://acccccccc.infura.io/ipfs/${added.path}`
       // const url ="https:acccccccc.infura-ipfs.io"
-      const url = "https:acccccccc/ipfs/${added.path}"
-      // const url = `https://ipfs.infura.io/ipfs/${added.path}`
+      // const url = "https:acccccccc/ipfs/${added.path}"
+      const url = "https://acccccccc.infura-ipfs.io/ipfs/${added.path}"
+      // const url = "https://ipfs.infura.io/ipfs/${added.path}"
+      // const url = "https://acccccccc.infura-ipfs.io/ipfs/${added.path}" latest??
+      // const url = https://ipfs.infura.io/ipfs/${added.path}
       setFileUrl(url)
       console.log(url);
     } catch (error) {
@@ -72,6 +75,8 @@ async function createItem() {
         const added = await client.add(data)
 
         const url = `https://acccccccc.infura.io/ipfs/${added.path}`
+        // const url = "https://acccccccc.infura-ipfs.io/ipfs/${added.path}"
+        // const url = "https://acccccccc.infura-ipfs.io/ipfs/${added.path}"
         // after file is uploaded to IPFS, pass the URL to save it on Polygon
         createSale(url)
     } catch (error) {
@@ -89,13 +94,17 @@ async function createItem() {
     })
     console.log(name);
     console.log(description);
-    console.log("image");
+    console.log(image);
     console.log("confirm property");
     try {
       const added = await client.add(data)
       console.log("client connecting");
+      const url = `https://acccccccc.infura.io/ipfs/${added.path}`
+      // const url = "https://acccccccc.infura-ipfs.io/ipfs/${added.path}"
+      // const url = "https:acccccccc/ipfs/${added.path}"
+      // const url = "https://acccccccc.infura-ipfs.io/ipfs/${added.path}"
       // const url = `https://acccccccc.infura.io/ipfs/${added.path}`
-      const url = `https://ipfs.infura.io/ipfs/${added.path}`
+      // const url = `https://ipfs.infura.io/ipfs/${added.path}`
       /* after metadata is uploaded to IPFS, return the URL to use it in the transaction */
       return url
     } catch (error) {
@@ -120,7 +129,7 @@ async function createItem() {
     listingPrice = listingPrice.toString()
     console.log("now create the NFT");
     let transaction = await contract.createToken(url, price, { value: listingPrice })
-    // console.log("url");
+    // console.log(url);
     console.log(price);
     console.log(listingPrice);
     // console.log("now create the NFT2"); here didn't work
