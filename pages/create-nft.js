@@ -45,10 +45,10 @@ export default function CreateItem() {
           progress: (prog) => console.log(`received: ${prog}`)
         }
       )
-      // const url = `https://acccccccc.infura.io/ipfs/${added.path}`
+      const url = `https://ipfs.infura.io/ipfs/${added.path}`;
       // const url ="https:acccccccc.infura-ipfs.io"
       // const url = "https:acccccccc/ipfs/${added.path}"
-      const url = "https://acccccccc.infura-ipfs.io/ipfs/${added.path}"
+      // const url = "https://acccccccc.infura-ipfs.io/ipfs/${added.path}"
       // const url = "https://ipfs.infura.io/ipfs/${added.path}"
       // const url = "https://acccccccc.infura-ipfs.io/ipfs/${added.path}" latest??
       // const url = https://ipfs.infura.io/ipfs/${added.path}
@@ -73,14 +73,16 @@ async function createItem() {
 
     try {
         const added = await client.add(data)
-
-        const url = `https://acccccccc.infura.io/ipfs/${added.path}`
+        const url = `https://ipfs.infura.io/ipfs/${added.path}`;
+        // const url = `https://acccccccc.infura.io/ipfs/${added.path}`
         // const url = "https://acccccccc.infura-ipfs.io/ipfs/${added.path}"
         // const url = "https://acccccccc.infura-ipfs.io/ipfs/${added.path}"
         // after file is uploaded to IPFS, pass the URL to save it on Polygon
         createSale(url)
+        console.log("working well")
     } catch (error) {
         console.log('Error uploading file: ', error)
+        console.log("sad");
     }
 }
 
@@ -90,19 +92,21 @@ async function createItem() {
     if (!name || !description || !price || !fileUrl) return
     /* first, upload metadata to IPFS */
     const data = JSON.stringify({
-      name, description, image: fileUrl
+      name, description, image: fileUrl,
     })
+    console.log("working");
     console.log(name);
     console.log(description);
-    console.log(image);
+    // console.log(image);
     console.log("confirm property");
     try {
       const added = await client.add(data)
       console.log("client connecting");
-      const url = `https://acccccccc.infura.io/ipfs/${added.path}`
+      // const url = `https://acccccccc.infura.io/ipfs/${added.path}`
+      const url = `https://ipfs.infura.io/ipfs/${added.path}`
       // const url = "https://acccccccc.infura-ipfs.io/ipfs/${added.path}"
       // const url = "https:acccccccc/ipfs/${added.path}"
-      // const url = "https://acccccccc.infura-ipfs.io/ipfs/${added.path}"
+      // const url = 'https://acccccccc.infura-ipfs.io/ipfs/${added.path}';
       // const url = `https://acccccccc.infura.io/ipfs/${added.path}`
       // const url = `https://ipfs.infura.io/ipfs/${added.path}`
       /* after metadata is uploaded to IPFS, return the URL to use it in the transaction */
@@ -128,11 +132,13 @@ async function createItem() {
     let listingPrice = await contract.getListingPrice()
     listingPrice = listingPrice.toString()
     console.log("now create the NFT");
+    console.log("test");
     let transaction = await contract.createToken(url, price, { value: listingPrice })
     // console.log(url);
     console.log(price);
     console.log(listingPrice);
-    // console.log("now create the NFT2"); here didn't work
+    console.log("now create the NFT2");
+    //  here didn't work
     await transaction.wait()
     console.log("created the NFT");
     router.push('/')
