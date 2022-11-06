@@ -4,13 +4,14 @@ require("@nomiclabs/hardhat-waffle")
 module.exports = {
   defaultNetwork: "hardhat",
   networks: {
-    hardhat: {
-      chainId: 1337
-    },
-    // mumbai: {
-    //   url: process.env.API_URL,
-    //   accounts: [process.env.PRIVATE_KEY],
+    // hardhat: {
+    //   chainId: 1337
     // },
+    mumbai: {
+      url: process.env.API_URL,
+      accounts: [process.env.PRIVATE_KEY],
+    },
+    
     // matic: {
     //   url: process.env.API_URL,
     //   accounts: [process.env.PRIVATE_KEY],

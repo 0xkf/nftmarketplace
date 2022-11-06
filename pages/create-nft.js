@@ -5,7 +5,6 @@ import { create } from 'ipfs-http-client'
 import { useRouter } from 'next/router'
 import Web3Modal from 'web3modal'
 
-
 const projectId = process.env.NEXT_PUBLIC_INFURA_IPFS_PROJECT_ID
 const projectSecret = process.env.NEXT_PUBLIC_INFURA_IPFS_PROJECT_SECRET
 const projectIdAndSecret = `${projectId}:${projectSecret}`
@@ -43,12 +42,53 @@ export default function CreateItem() {
           progress: (prog) => console.log(`received: ${prog}`)
         }
       )
-      const url = `https://ipfs.infura.io/ipfs/${added.path}`
+      const url = `https://acccccccc.infura.io/ipfs/${added.path}`
       setFileUrl(url)
     } catch (error) {
       console.log('Error uploading file: ', error)
     }  
   }
+  
+  async function onChange(e) {
+
+    const file = e.target.files[0]
+    try {
+        const added = await client.add(file, {
+            progress: (prog) => console.log(`received: ${prog}`),
+        })
+
+        const url = `https://acccccccc.infura.io/ipfs/${added.path}`
+
+        client.pin.add(added.path).then((res) => {
+            console.log(res)
+            setFileUrl(url)
+        })
+    } catch (error) {
+        console.log('Error uploading file: ', error)
+    }
+}
+
+async function createItem() {
+    const { name, description, price } = formInput
+    if (!name || !description || !price || !fileUrl) return
+    /* first, upload to IPFS */
+    const data = JSON.stringify({
+        name,
+        description,
+        image: fileUrl,
+    })
+
+    try {
+        const added = await client.add(data)
+
+        const url = `https://acccccccc.infura.io/ipfs/${added.path}`
+        // after file is uploaded to IPFS, pass the URL to save it on Polygon
+        createSale(url)
+    } catch (error) {
+        console.log('Error uploading file: ', error)
+    }
+}
+
   async function uploadToIPFS() {
     const { name, description, price } = formInput
     if (!name || !description || !price || !fileUrl) return
@@ -58,7 +98,7 @@ export default function CreateItem() {
     })
     try {
       const added = await client.add(data)
-      const url = `https://ipfs.infura.io/ipfs/${added.path}`
+      const url = `https://acccccccc.infura.io/ipfs/${added.path}`
       /* after metadata is uploaded to IPFS, return the URL to use it in the transaction */
       return url
     } catch (error) {
