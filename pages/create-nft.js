@@ -1,12 +1,25 @@
 /* pages/create-nft.js */
 import { useState } from 'react'
 import { ethers } from 'ethers'
-import { create as ipfsHttpClient } from 'ipfs-http-client'
+import { create } from 'ipfs-http-client'
 import { useRouter } from 'next/router'
 import Web3Modal from 'web3modal'
 
-const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0')
 
+const projectId = process.env.NEXT_PUBLIC_INFURA_IPFS_PROJECT_ID
+const projectSecret = process.env.NEXT_PUBLIC_INFURA_IPFS_PROJECT_SECRET
+const projectIdAndSecret = `${projectId}:${projectSecret}`
+
+const client = create({
+  host: 'ipfs.infura.io',
+  port: 5001,
+  protocol: 'https',
+  headers: {
+    authorization: `Basic ${Buffer.from(projectIdAndSecret).toString(
+      'base64'
+    )}`,
+  },
+})
 
 
 import {
